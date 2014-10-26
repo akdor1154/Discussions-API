@@ -1,12 +1,15 @@
 {
-  "name": "opendata",
-  "description": "Open Data Project",
+  "name": "Discussions",
+  "description": "University discussion forum",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
     "body-parser": "^1.6.3",
+    "cas": "0.0.3",
     "cors": "^2.4.2",
+    "ejs": "^1.0.0",
     "express": "3.x",
+    "jade": "^1.7.0",
     "mongodb": "^1.4.8"
   }
 }
