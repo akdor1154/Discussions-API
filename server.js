@@ -2,11 +2,11 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var questions = require('./routes/questions');
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 var cors = require('cors');
 
 app.set('views', './views');
-// // app.set('view engine', 'jade');
-// app.engine('.html', require('jade'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
@@ -36,6 +36,19 @@ exports.cas_login = function(req, res) {
 
 
 
+
+io.on('connection', function (socket) {
+  socket.on('new message', function (data) {
+  	data.date = new Date();
+  	console.log(data);
+    // we tell the client to execute 'new message'
+    socket.broadcast.emit('new message', data);
+  });
+});
+
+
+
+
 // allow corss origin requests from the following servers
 app.use(cors());
 var corsOptions = {
@@ -46,24 +59,27 @@ app.use( bodyParser.json() );	      					// to support JSON-encoded bodies
 app.use( bodyParser.urlencoded( {extended:false}) );	// to support URL-encoded bodies
 
 // log in
-app.get('/', function(req, res){
-	res.redirect('https://my.monash.edu.au/authentication/cas/login?service=http://google.com');
-});
+// app.get('/', function(req, res){
+// 	res.redirect('https://my.monash.edu.au/authentication/cas/login?service=http://google.com');
+// });
 app.get('/questions', cors(corsOptions), questions.findAll); //retrieve all questions
 app.get('/questions/nextTenQuestions/:requestNumber', cors(corsOptions), questions.nextTenQuestions); //retrieve all questions
 app.get('/questions/:id', cors(corsOptions), questions.findById); //retrieve questions with id
-app.post('/questions', cors(corsOptions), questions.addQuestion); //add a question
+app.post('/questions', cors(corsOptions), questions.addQuestion	); //add a question
 app.put('/questions/:id', cors(corsOptions), questions.updateQuestion); //update a question
 app.put('/questions/upvote/:id', cors(corsOptions), questions.upVote); //update a question
 app.put('/questions/dnvote/:id', cors(corsOptions), questions.dnVote); //update a question
 app.delete('/questions/:id', cors(corsOptions), questions.deleteQuestion); //delete a question
 
-var server = app.listen(3000, function(){
-  var host = server.address().address
-  var port = server.address().port
 
-  console.log('Discussions API listening at http://%s:%s', host, port)	
+server.listen(3000, function(){
+	var host = server.address().address
+	var port = server.address().port
+   	console.log('Discussions API listening at http://%s:%s', host, port)	
 });
+// var appserver = app.listen(3000, function(){
+// var host = appserver.address().address
+// var port = appserver.address().port
 
-
-// console.log('running on 3000...');
+//   console.log('Discussions API listening at http://%s:%s', host, port)	
+// });

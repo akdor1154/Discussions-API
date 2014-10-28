@@ -10,7 +10,7 @@ db = new Db('discussions', server);
 // Connect to database and populate if needed
 db.open(function (err, db) {
 	if(!err) {
-		console.log('connected to discussions database');
+		console.log('Connected to \'discussions\' database');
 		db.collection('questions', {strict:true}, function(err, collection) {
 			if (err) {
 				console.log('the question collection does not exist yet... Ill try to make one now');
@@ -48,6 +48,7 @@ exports.findById = function(req, res) {
 
 exports.addQuestion = function(req, res) {
 	var question = req.body;
+  question.date = new Date();
 	question.score = 0;
 	console.log(question);
 	db.collection('questions', function (err, collection) {
