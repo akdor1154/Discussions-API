@@ -38,12 +38,27 @@ exports.cas_login = function(req, res) {
 
 
 io.on('connection', function (socket) {
-  socket.on('new message', function (data) {
-  	data.date = new Date();
-  	console.log(data);
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', data);
+
+  // Add users to discussion rooms
+  socket.on('enter discussion', function (data) {
+    socket.join(data.question_id);
+    console.log(data.username + ' joined question: ' + data.question_id);
+
+    // Wait for new messages then boadcast to room
+    socket.on('new message', function (data) {
+      // data.date = new Date();
+      console.log(data);
+      // we tell the client to execute 'new message'
+      socket.broadcast.to(data.question_id).emit('new message', data.);
+    });
   });
+
+  // Remove users from discussion rooms
+  socket.on('leave discussion', function (data) {
+    socket.leave(data.question_id);
+    console.log(data.username + ' left question: ' + data.question_id)
+  });
+
 });
 
 
@@ -52,7 +67,8 @@ io.on('connection', function (socket) {
 // allow corss origin requests from the following servers
 app.use(cors());
 var corsOptions = {
-  origin: 'http://localhost:9000'
+  // origin: 'http://localhost:9000',
+  // origin: 'http://0.0.0.0:9000'
 };
 
 app.use( bodyParser.json() );	      					// to support JSON-encoded bodies
