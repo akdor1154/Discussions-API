@@ -36,21 +36,28 @@ exports.cas_login = function(req, res) {
 
 
 
-
 io.on('connection', function (socket) {
+  console.log('new connection');
 
   // Add users to discussion rooms
   socket.on('enter discussion', function (data) {
-    socket.join(data.question_id);
-    console.log(data.username + ' joined question: ' + data.question_id);
 
-    // Wait for new messages then boadcast to room
-    socket.on('new message', function (data) {
-      // data.date = new Date();
-      console.log(data);
-      // we tell the client to execute 'new message'
-      socket.broadcast.to(data.question_id).emit('new message', data.);
-    });
+    // Check if user already joined
+    if (socket.rooms.indexOf(data.question_id) === -1) {
+      socket.join(data.question_id);
+      console.log(socket.rooms);
+
+      // Wait for new messages then boadcast to room
+      socket.on('new message', function (data) {
+
+        // data.date = new Date();
+        console.log(data);
+
+        // we tell the client to execute 'new message'
+        socket.broadcast.to(data.question_id).emit('new message', data);
+      });
+    }
+
   });
 
   // Remove users from discussion rooms
