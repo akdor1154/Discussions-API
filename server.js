@@ -45,20 +45,17 @@ io.on('connection', function (socket) {
     // Check if user already joined
     if (socket.rooms.indexOf(data.question_id) === -1) {
       socket.join(data.question_id);
-      console.log(socket.rooms);
-
-      // Wait for new messages then boadcast to room
-      socket.on('new message', function (data) {
-
-        // data.date = new Date();
-        console.log(data);
-
-        // we tell the client to execute 'new message'
-        socket.broadcast.to(data.question_id).emit('new message', data);
-      });
+      // console.log(socket.rooms);
     }
-
   });
+
+  // Wait for new messages then boadcast to room
+  socket.on('message sent', function (data) {
+
+    // we tell the client to execute 'new message'
+    socket.broadcast.to(data.question_id).emit('new message', data);
+  });
+
 
   // Remove users from discussion rooms
   socket.on('leave discussion', function (data) {
@@ -90,8 +87,8 @@ app.get('/questions/nextTenQuestions/:requestNumber', cors(corsOptions), questio
 app.get('/questions/:id', cors(corsOptions), questions.findById); //retrieve questions with id
 app.post('/questions', cors(corsOptions), questions.addQuestion	); //add a question
 app.put('/questions/:id', cors(corsOptions), questions.updateQuestion); //update a question
-app.put('/questions/upvote/:id', cors(corsOptions), questions.upVote); //update a question
-app.put('/questions/dnvote/:id', cors(corsOptions), questions.dnVote); //update a question
+app.put('/questions/upvote/:id', cors(corsOptions), questions.upVote); //upvote uestion
+app.put('/questions/dnvote/:id', cors(corsOptions), questions.dnVote); //downvote a question
 app.delete('/questions/:id', cors(corsOptions), questions.deleteQuestion); //delete a question
 
 
