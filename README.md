@@ -1,4 +1,4 @@
-discussions-back
+Discussions API
 ================
 
-Back end application for a discussion forum using node.js and Express
+An API for Discussions using node.js and Express
