@@ -10,7 +10,7 @@ db = new Db('discussions', server);
 // Connect to database and populate if needed
 db.open(function (err, db) {
 	if(!err) {
-		console.log('Connected to \'discussions\' database');
+		console.log('Connected to \'questions\' in \'discussions\' database');
 		db.collection('questions', {strict:true}, function(err, collection) {
 			if (err) {
 				console.log('the question collection does not exist yet... Ill try to make one now');
