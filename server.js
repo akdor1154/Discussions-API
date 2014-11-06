@@ -164,12 +164,12 @@ app.get('/comments/:id', cors(corsOptions), comments.findAll); //retrieve all co
 app.post('/comments/:id', cors(corsOptions), comments.addComment); //add a comments
 app.delete('/comments/:commentId', cors(corsOptions), comments.deleteComment); //delete a question
 
-server.listen(3000, function(){
+server.listen(8002, function(){
 	var host = server.address().address
 	var port = server.address().port
    	console.log('Discussions API listening at http://%s:%s', host, port)	
 });
-// var appserver = app.listen(3000, function(){
+// var appserver = app.listen(8002, function(){
 // var host = appserver.address().address
 // var port = appserver.address().port
 
