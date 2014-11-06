@@ -5,7 +5,7 @@ var Server = mongo.Server,
 	BSON = mongo.BSONPure;
 
 var server = new Server ('localhost', 27017, {auto_reconnect: true});
-db = new Db('discussions', server);
+db = new Db('discussions', server, {w:1});
 
 // Connect to database and populate if needed
 db.open(function (err, db) {

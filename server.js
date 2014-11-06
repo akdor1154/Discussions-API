@@ -108,8 +108,8 @@ io.on('connection', function (socket) {
 // allow corss origin requests from the following servers
 app.use(cors());
 var corsOptions = {
-  // origin: 'http://localhost:9000',
-  // origin: 'http://0.0.0.0:9000'
+  origin: 'http://localhost:9000',
+  origin: 'http://0.0.0.0:9000'
 };
 
 app.use( bodyParser.json() );	      					// to support JSON-encoded bodies
