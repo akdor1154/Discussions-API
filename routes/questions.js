@@ -5,12 +5,12 @@ var Server = mongo.Server,
 	BSON = mongo.BSONPure;
 
 var server = new Server ('localhost', 27017, {auto_reconnect: true});
-db = new Db('discussions', server);
+db = new Db('discussions', server, {w:1});
 
 // Connect to database and populate if needed
 db.open(function (err, db) {
 	if(!err) {
-		console.log('Connected to \'discussions\' database');
+		console.log('Connected to \'questions\' in \'discussions\' database');
 		db.collection('questions', {strict:true}, function(err, collection) {
 			if (err) {
 				console.log('the question collection does not exist yet... Ill try to make one now');
