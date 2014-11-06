@@ -19,20 +19,6 @@ var cas = new CAS({base_url: 'https://my.monash.edu.au/authentication/cas', serv
 
 
 
-//// mongo ////////////////
-
-// var mongo = require('mongodb');
-
-// var Server = mongo.Server,
-//   Db = mongo.Db,
-//   BSON = mongo.BSONPure;
-
-// var server = new Server ('localhost', 27017, {auto_reconnect: true});
-// db = new Db('discussions', server);
-
-////////////////////////////
-
-
 // exports.cas_login = function(req, res) {
 //   var ticket = req.param('ticket');
 //   if (ticket) {
