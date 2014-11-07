@@ -107,7 +107,7 @@ app.use( bodyParser.urlencoded( {extended:false}) );	// to support URL-encoded b
 
 
 // Use API as static HTML/JavaScript server as well
-app.use('/', express.static('/home/nathan/Desktop/AngularForum/distribution'));
+app.use('/', express.static('../Discussions-dist'));
 
 
 
