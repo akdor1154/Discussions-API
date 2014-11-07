@@ -104,13 +104,6 @@ app.use( bodyParser.urlencoded( {extended:false}) );	// to support URL-encoded b
 
 
 
-
-
-// Use API as static HTML/JavaScript server as well
-app.use('/', express.static('../Discussions-dist'));
-
-
-
 // log in
 // app.get('/', function(req, res){
 // 	res.redirect('https://my.monash.edu.au/authentication/cas/login?service=http://google.com');
@@ -149,14 +142,8 @@ app.get('/comments/:id', cors(corsOptions), comments.findAll); //retrieve all co
 app.post('/comments/:id', cors(corsOptions), comments.addComment); //add a comments
 app.delete('/comments/:commentId', cors(corsOptions), comments.deleteComment); //delete a question
 
-server.listen(8002, function(){
+server.listen(3002, function(){
 	var host = server.address().address
 	var port = server.address().port
    	console.log('Discussions API listening at http://%s:%s', host, port)	
 });
-// var appserver = app.listen(8002, function(){
-// var host = appserver.address().address
-// var port = appserver.address().port
-
-//   console.log('Discussions API listening at http://%s:%s', host, port)	
-// });
