@@ -9,32 +9,16 @@ var cors = require('cors');
 var passport = require('passport');
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
+
+var CAS = require('cas');
+var cas = new CAS({base_url: 'https://my.monash.edu.au/authentication/cas', service: 'http://melts-dev.eng.monash.edu:7999/nrshe1/'});
+
 app.set('views', './views');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 
-var CAS = require('cas');
-var cas = new CAS({base_url: 'https://my.monash.edu.au/authentication/cas', service: 'my_service'});
 
-
-
-// exports.cas_login = function(req, res) {
-//   var ticket = req.param('ticket');
-//   if (ticket) {
-//     cas.validate(ticket, function(err, status, username) {
-//       if (err) {
-//         // Handle the error
-//         res.send({error: err});
-//       } else {
-//         // Log the user in
-//         res.send({status: status, username: username});
-//       }
-//     });
-//   } else {
-//     res.redirect('/');
-//   }
-// };
 
 
 
@@ -94,7 +78,7 @@ io.on('connection', function (socket) {
 // allow cross origin requests from the following servers
 app.use(cors());
 var corsOptions = {
-	origin: 'http://localhost:8002'
+	origin: 'http://localhost:9000'
 };
 
 app.use( bodyParser.json() );	      					// to support JSON-encoded bodies
@@ -105,16 +89,26 @@ app.use( bodyParser.urlencoded( {extended:false}) );	// to support URL-encoded b
 
 
 // log in
-// app.get('/', function(req, res){
-// 	res.redirect('https://my.monash.edu.au/authentication/cas/login?service=http://google.com');
-// });
+app.get('/', function(req, res) {
+   var ticket = req.param('ticket');
+   if (ticket) {
+     cas.validate(ticket, function(err, status, username) {
+       if (err) {
+         // Handle the error
+         res.send({error: err});
+       } else {
+         // Log the user in
+         res.send({status: status, username: username});
+       }
+     });
+   } else {
+     res.redirect('https://my.monash.edu.au/authentication/cas/login?service=http://melts-dev.eng.monash.edu:7999/nrshe1/');
+   }
+});
 
 
 
 
-// app.get('/', function (req,res) {
-//   res.render('index');
-// });
 
 // Redirect the user to the OAuth 2.0 provider for authentication.  When
 // complete, the provider will redirect the user back to the application at
@@ -142,7 +136,7 @@ app.get('/comments/:id', cors(corsOptions), comments.findAll); //retrieve all co
 app.post('/comments/:id', cors(corsOptions), comments.addComment); //add a comments
 app.delete('/comments/:commentId', cors(corsOptions), comments.deleteComment); //delete a question
 
-server.listen(3002, function(){
+server.listen(8002, function(){
 	var host = server.address().address
 	var port = server.address().port
    	console.log('Discussions API listening at http://%s:%s', host, port)	
